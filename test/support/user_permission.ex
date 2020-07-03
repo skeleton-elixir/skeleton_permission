@@ -12,10 +12,4 @@ defmodule Skeleton.App.UserPermission do
       unpermit(context.params, ["admin"])
     end
   end
-
-  # def preload(_permission_name, _context, params) do
-  #   Skeleton.Phoenix.User
-  #   |> where([u], u.id == ^params[:id])
-  #   |> Repo.all()
-  # end
 end

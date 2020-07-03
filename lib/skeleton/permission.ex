@@ -18,4 +18,8 @@ defmodule Skeleton.Permission do
     |> Map.drop(string_params)
     |> Map.drop(Enum.map(string_params, &String.to_atom/1))
   end
+
+  def include?(a, b) do
+    length(a -- a -- b) > 0
+  end
 end
