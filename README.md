@@ -25,13 +25,13 @@ end
 config/config.exs
 
 ```elixir
-config :skeleton_permission, permission: App.Permission
+config :skeleton_permission, permission: AppWeb.Permission
 ```
 
-lib/app/permission.ex
+lib/app_web/permission.ex
 
 ```elixir
-defmodule App.Permission do
+defmodule AppWeb.Permission do
   defmacro __using__(_) do
     quote do
       use Skeleton.Permission
@@ -58,8 +58,8 @@ end
 ## Criando o arquivo de permissão básico
 
 ```elixir
-defmodule App.UserPermission do
-  use App.Permission
+defmodule AppWeb.UserPermission do
+  use AppWeb.Permission
 
   # Checks
 
@@ -87,8 +87,8 @@ end
 ## Criando o arquivo de permissão com preload básico
 
 ```elixir
-defmodule App.UserPermission do
-  use App.Permission
+defmodule AppWeb.UserPermission do
+  use AppWeb.Permission
 
   # Checks
 
@@ -131,8 +131,8 @@ end
 ## Criando o arquivo de permissão com preload mais avançado
 
 ```elixir
-defmodule App.UserPermission do
-  use App.Permission
+defmodule AppWeb.UserPermission do
+  use AppWeb.Permission
 
   # Checks
 
