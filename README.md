@@ -36,7 +36,7 @@ defmodule AppWeb.Permission do
     quote do
       use Skeleton.Permission
       import Ecto.Query
-      import App.Permission
+      import AppWeb.Permission
       alias App.Repo
     end
   end
