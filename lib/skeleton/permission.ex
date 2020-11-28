@@ -1,13 +1,17 @@
 defmodule Skeleton.Permission do
+  @callback context(Any.t()) :: Map.t()
+
   defmacro __using__(_opts) do
     quote do
       import Skeleton.Permission
+
+      def context(_), do: %{}
 
       def check(_, _), do: false
 
       def permit(_, context), do: context
 
-      defoverridable check: 2, permit: 2
+      defoverridable context: 1, check: 2, permit: 2
     end
   end
 
