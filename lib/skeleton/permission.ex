@@ -5,13 +5,13 @@ defmodule Skeleton.Permission do
     quote do
       import Skeleton.Permission
 
-      def context(_), do: %{}
+      def context(_, _), do: %{}
 
       def check(_, _), do: false
 
       def permit(_, context), do: context
 
-      defoverridable context: 1, check: 2, permit: 2
+      defoverridable context: 2, check: 2, permit: 2
     end
   end
 
