@@ -7,11 +7,15 @@ defmodule Skeleton.Permission do
 
       def context(_, _), do: %{}
 
+      def preload_data(context, _), do: context
+
+      def preload_data(_, _, items), do: items
+
       def check(_, _), do: false
 
       def permit(_, context), do: context
 
-      defoverridable context: 2, check: 2, permit: 2
+      defoverridable context: 2, check: 2, permit: 2, preload_data: 2, preload_data: 3
     end
   end
 
