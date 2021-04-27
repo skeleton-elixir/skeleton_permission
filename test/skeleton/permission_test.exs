@@ -2,7 +2,7 @@ defmodule Skeleton.PermissionTest do
   use Skeleton.App.TestCase
   alias Skeleton.App.{User, UserPermission}
 
-  describe "check permittion" do
+  describe "check permission" do
     test "when it's permitted" do
       context = %{
         current_user: %User{id: 123},

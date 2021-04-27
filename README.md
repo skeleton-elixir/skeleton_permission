@@ -35,7 +35,6 @@ defmodule AppWeb.Permission do
   defmacro __using__(_) do
     quote do
       use Skeleton.Permission
-      import Ecto.Query
       import AppWeb.Permission
       alias App.Repo
     end

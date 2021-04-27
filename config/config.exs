@@ -1,3 +1,3 @@
 use Mix.Config
 
-import_config "#{Mix.env()}.exs"
+config :skeleton_permission, permission: Skeleton.App.Permission
