@@ -1,8 +1,12 @@
 defmodule Skeleton.App.UserPermission do
   use Skeleton.App.Permission
 
+  def context(conn, _context) do
+    %{user: conn.assigns[:user]}
+  end
+
   def check(:can_update, context) do
-    context.current_user && context.current_user.id == context.resource.id
+    context.current_user && context.current_user.id == context.user.id
   end
 
   def permit(:can_update, context) do

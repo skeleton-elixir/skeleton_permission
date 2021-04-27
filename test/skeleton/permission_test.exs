@@ -6,7 +6,7 @@ defmodule Skeleton.PermissionTest do
     test "when it's permitted" do
       context = %{
         current_user: %User{id: 123},
-        resource: %User{id: 123}
+        user: %User{id: 123}
       }
 
       assert UserPermission.check(:can_update, context)
@@ -15,7 +15,7 @@ defmodule Skeleton.PermissionTest do
     test "when isn't permitted" do
       context = %{
         current_user: %User{id: 123},
-        resource: %User{id: 321}
+        user: %User{id: 321}
       }
 
       refute UserPermission.check(:can_update, context)
@@ -26,7 +26,7 @@ defmodule Skeleton.PermissionTest do
     test "when it's permitted" do
       context = %{
         current_user: %User{id: 123, admin: true},
-        resource: %User{id: 123},
+        user: %User{id: 123},
         params: %{
           name: "my name",
           email: "email@email.com",
@@ -44,7 +44,7 @@ defmodule Skeleton.PermissionTest do
     test "when isn't permitted" do
       context = %{
         current_user: %User{id: 123},
-        resource: %User{id: 123},
+        user: %User{id: 123},
         params: %{
           name: "my name",
           email: "email@email.com",

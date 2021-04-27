@@ -13,31 +13,62 @@ parametros permitidos diretamente no `Controller` ou `Resolver(Absinthe)`
 ## Instalação
 
 ```elixir
+# mix.exs
+
 def deps do
   [
-    {:skeleton_permission, github: "skeleton-elixir/skeleton_permission"},
+    {:skeleton_phoenix, "~> 1.0.0"},
+    {:skeleton_permission, "~> 1.0.0"}
   ]
 end
 ```
 
-## Configurando
-
-config/config.exs
-
 ```elixir
-config :skeleton_permission, permission: AppWeb.Permission
+# config/config.exs
+
+config :skeleton_phoenix, controller: AppWeb.Controller
+
+config :skeleton_permission,
+  controller: AppWeb.Controller
+  permission: AppWeb.Permission
 ```
 
-lib/app_web/permission.ex
+```elixir
+# lib/app_web/controller.ex
+
+defmodule App.Controller do
+  @behaviour Skeleton.Phoenix.Controller
+
+  defmacro __using__(_) do
+    quote do
+      use Skeleton.Phoenix.Controller
+      use Skeleton.Permission.Controller
+    end
+  end
+
+  def is_authenticated(conn), do: conn.assigns[:current_user]
+end
+```
 
 ```elixir
+# lib/app_web/permission.ex
+
 defmodule AppWeb.Permission do
+  @behaviour Skeleton.Permission
+
   defmacro __using__(_) do
     quote do
       use Skeleton.Permission
       import AppWeb.Permission
       alias App.Repo
     end
+  end
+
+  def context(conn) do
+    %{
+      current_user: conn.assigns[:current_user],
+      params: conn.params
+    }
   end
 
   def current_user?(context, user) do
@@ -60,15 +91,15 @@ end
 defmodule AppWeb.UserPermission do
   use AppWeb.Permission
 
+  def context(conn, _context) do
+    %{user: conn.assigns[:user]}
+  end
+
   # Checks
 
   def check(:can_update, context) do
     logged_in?(context)
-    && current_user?(context, context.resource)
-  end
-
-  def check(:can_join, context) do
-    logged_in?(context) && Enum.empty?(context.members)
+    && current_user?(context, context.user)
   end
 
   # Permits
@@ -82,18 +113,22 @@ defmodule AppWeb.UserPermission do
   end
 end
 ```
-
-## Criando o arquivo de permissão com preload básico
+## Criando o arquivo de permissão com preload
 
 ```elixir
 defmodule AppWeb.UserPermission do
   use AppWeb.Permission
+  alias App.User
+
+  def context(conn, _context) do
+    %{user: conn.assigns[:user]}
+  end
 
   # Checks
 
   def check(:can_update, context) do
     logged_in?(context)
-    && current_user?(context, context.resource)
+    && current_user?(context, context.user)
   end
 
   def check(:can_join, context) do
@@ -112,51 +147,16 @@ defmodule AppWeb.UserPermission do
 
   # Preload
 
-  def preload(context, permissions, users) do
-    users
-    |> compose_members(permissions)
+  def preload_data(context, permissions) do
+    [user] = do_preload_data(context, permissions, [context.user])
+    %{context | user: user}
   end
 
-  defp compose_members(users, permissions) do
-    if include?(permissions, [:can_join]) do
-      Repo.preload(:members)
-    else
-      users
-    end
-  end
-end
-```
-
-## Criando o arquivo de permissão com preload mais avançado
-
-```elixir
-defmodule AppWeb.UserPermission do
-  use AppWeb.Permission
-
-  # Checks
-
-  def check(:can_update, context) do
-    logged_in?(context)
-    && current_user?(context, context.resource)
+  def preload_data(context, permissions, users) do
+    do_preload_data(context, permissions, users)
   end
 
-  def check(:can_join, context) do
-    logged_in?(context) && Enum.empty?(context.members)
-  end
-
-  # Permits
-
-  def permit(:can_update, context) do
-    if check(:can_update, context) && is_admin?(context) do
-      context.params
-    else
-      unpermit(context.params, ["admin"]) # You can use atom(:admin) too
-    end
-  end
-
-  # Preload
-
-  def preload(context, permissions, users) do
+  def do_preload_data(context, permissions, users) do
     ids = Enum.map(users, & &1.id)
 
     User
