@@ -2,7 +2,7 @@ defmodule SkeletonPermission.MixProject do
   use Mix.Project
 
   @version "1.0.0"
-  @url "https://github.com/skeleton-elixir/skeleton_permission"
+  @source_url "https://github.com/skeleton-elixir/skeleton_permission"
   @maintainers [
     "Diego Nogueira",
     "Jhonathas Matos"
@@ -13,12 +13,12 @@ defmodule SkeletonPermission.MixProject do
       name: "SkeletonPermission",
       app: :skeleton_permission,
       version: @version,
-      elixir: "~> 1.10",
+      elixir: "~> 1.8",
       elixirc_paths: elixirc_paths(Mix.env()),
       package: package(),
-      source_url: @url,
+      source_url: @source_url,
+      description: description(),
       maintainers: @maintainers,
-      description: "Elixir structure",
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
@@ -34,8 +34,14 @@ defmodule SkeletonPermission.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:plug_cowboy, "~> 2.0"}
     ]
+  end
+
+  defp description() do
+    "O Skeleton Permission ajuda a controlar toda parte de autorização do seu sistema,
+    seja via Controller, Resolver(Absinthe), View e LiveView."
   end
 
   defp elixirc_paths(:test), do: ["lib", "test/support"]
@@ -45,8 +51,11 @@ defmodule SkeletonPermission.MixProject do
     [
       maintainers: @maintainers,
       licenses: ["MIT"],
-      links: %{github: @url},
-      files: ~w(lib) ++ ~w(CHANGELOG.md LICENSE mix.exs README.md)
+      files: ~w(lib CHANGELOG.md LICENSE mix.exs README.md),
+      links: %{
+        "GitHub" => @source_url,
+        "Changelog" => "#{@source_url}/blob/master/CHANGELOG.md"
+      }
     ]
   end
 end
