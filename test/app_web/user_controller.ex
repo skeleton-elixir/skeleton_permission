@@ -1,6 +1,6 @@
-defmodule Skeleton.App.UserController do
-  use Skeleton.App.Controller
-  alias Skeleton.App.UserPermission
+defmodule Skeleton.AppWeb.UserController do
+  use Skeleton.AppWeb, :controller
+  alias Skeleton.AppWeb.UserPermission
 
   def update(conn) do
     conn

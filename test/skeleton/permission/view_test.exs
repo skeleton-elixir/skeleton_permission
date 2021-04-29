@@ -2,7 +2,8 @@ defmodule Skeleton.Permission.ViewTest do
   use Skeleton.App.TestCase
   import Plug.Conn
   alias Plug.Conn
-  alias Skeleton.App.{User, UserView}
+  alias Skeleton.App.User
+  alias Skeleton.AppWeb.UserView
 
   setup context do
     conn = %Conn{}

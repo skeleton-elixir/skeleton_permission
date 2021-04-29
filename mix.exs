@@ -44,7 +44,7 @@ defmodule SkeletonPermission.MixProject do
     seja via Controller, Resolver(Absinthe), View e LiveView."
   end
 
-  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(:test), do: ["lib", "test/app", "test/app_web"]
   defp elixirc_paths(_), do: ["lib"]
 
   defp package do

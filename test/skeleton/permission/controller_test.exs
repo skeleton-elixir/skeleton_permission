@@ -1,8 +1,11 @@
 defmodule Skeleton.Phoenix.ControllerTest do
   use Skeleton.App.TestCase
+
   import Plug.Conn
+
   alias Plug.Conn
-  alias Skeleton.App.{User, UserController}
+  alias Skeleton.App.User
+  alias Skeleton.AppWeb.UserController
 
   setup context do
     conn = %Conn{}
@@ -12,6 +15,7 @@ defmodule Skeleton.Phoenix.ControllerTest do
   describe "check permisssion" do
     test "when is permitted", context do
       user = %User{id: 1}
+
       conn =
         context.conn
         |> assign(:current_user, user)

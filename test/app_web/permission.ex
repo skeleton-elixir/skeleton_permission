@@ -1,4 +1,4 @@
-defmodule Skeleton.App.Permission do
+defmodule Skeleton.AppWeb.Permission do
   @behaviour Skeleton.Permission
 
   defmacro __using__(_) do

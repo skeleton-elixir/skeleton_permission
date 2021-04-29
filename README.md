@@ -24,29 +24,21 @@ end
 ```
 
 ```elixir
-# config/config.exs
-
-config :skeleton_phoenix, controller: AppWeb.Controller
-
-config :skeleton_permission,
-  controller: AppWeb.Controller
-  permission: AppWeb.Permission
-```
-
-```elixir
 # lib/app_web/controller.ex
 
-defmodule App.Controller do
+defmodule AppWeb.Controller do
   @behaviour Skeleton.Phoenix.Controller
 
   defmacro __using__(_) do
     quote do
-      use Skeleton.Phoenix.Controller
-      use Skeleton.Permission.Controller
+      use Skeleton.Phoenix.Controller, controller: AppWeb.Controller
+      use Skeleton.Permission.Controller, permission: AppWeb.Permission
     end
   end
 
   def is_authenticated(conn), do: conn.assigns[:current_user]
+
+  def fallback(conn), do: conn
 end
 ```
 
@@ -108,11 +100,12 @@ defmodule AppWeb.UserPermission do
     if check(:can_update, context) && is_admin?(context) do
       context.params
     else
-      unpermit(context.params, ["admin"]) # You can use atom(:admin) too
+      unpermit(context.params, ["admin"])
     end
   end
 end
 ```
+
 ## Criando o arquivo de permissão com preload
 
 ```elixir

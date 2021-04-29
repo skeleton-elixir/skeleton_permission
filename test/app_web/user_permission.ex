@@ -1,5 +1,5 @@
-defmodule Skeleton.App.UserPermission do
-  use Skeleton.App.Permission
+defmodule Skeleton.AppWeb.UserPermission do
+  use Skeleton.AppWeb.Permission
 
   def context(conn, _context) do
     %{user: conn.assigns[:user]}

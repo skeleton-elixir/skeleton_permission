@@ -1,27 +1,24 @@
 defmodule Skeleton.Permission.Controller do
   import Plug.Conn
-  alias Skeleton.Permission.Config
 
   # Callbacks
 
-  defmacro __using__(_) do
+  defmacro __using__(opts) do
     alias Skeleton.Permission.Controller
 
     quote do
-      import unquote(Config.controller())
-
-      # Check permission
+      @permission_module unquote(opts[:permission]) || raise("Permission required")
 
       def check_permission(%{halted: true} = conn, _, _, _), do: conn
 
-      def check_permission(conn, permission_module, permission_name, ctx_fun) do
-        Controller.do_check_permission(conn, permission_module, permission_name, ctx_fun)
+      def check_permission(conn, permission, permission_name, ctx_fun) do
+        Controller.do_check_permission(conn, @permission_module, permission, permission_name, ctx_fun)
       end
 
       def check_permission(%{halted: true} = conn, _, _), do: conn
 
-      def check_permission(conn, permission_module, permission_name) do
-        Controller.do_check_permission(conn, permission_module, permission_name, fn _, ctx ->
+      def check_permission(conn, permission, permission_name) do
+        Controller.do_check_permission(conn, @permission_module, permission, permission_name, fn _, ctx ->
           ctx
         end)
       end
@@ -30,21 +27,21 @@ defmodule Skeleton.Permission.Controller do
 
       def permit_params(%{halted: true} = conn, _, _), do: conn
 
-      def permit_params(conn, permission_module, permission_name) do
-        Controller.do_permit_params(conn, permission_module, permission_name)
+      def permit_params(conn, permission, permission_name) do
+        Controller.do_permit_params(conn, @permission_module, permission, permission_name)
       end
     end
   end
 
   # Do check permission
 
-  def do_check_permission(conn, permission_module, permission_name, ctx_fun) do
+  def do_check_permission(conn, permission_module, permission, permission_name, ctx_fun) do
     context =
       conn
-      |> build_permission_context(permission_module, ctx_fun)
-      |> permission_module.preload_data([permission_name])
+      |> build_permission_context(permission_module, permission, ctx_fun)
+      |> permission.preload_data([permission_name])
 
-    if permission_module.check(permission_name, context) do
+    if permission.check(permission_name, context) do
       conn
     else
       unauthorized(conn)
@@ -53,17 +50,17 @@ defmodule Skeleton.Permission.Controller do
 
   # Do permit params
 
-  def do_permit_params(conn, permission_module, permission_name) do
-    context = build_permission_context(conn, permission_module, fn _, ctx -> ctx end)
-    permitted_params = permission_module.permit(permission_name, context)
+  def do_permit_params(conn, permission_module, permission, permission_name) do
+    context = build_permission_context(conn, permission_module, permission, fn _, ctx -> ctx end)
+    permitted_params = permission.permit(permission_name, context)
     Map.put(conn, :params, permitted_params)
   end
 
   # Do build context
 
-  def build_permission_context(conn, permission_module, ctx_fun) do
-    default_context = Config.permission().context(conn)
-    permission_context = permission_module.context(conn, default_context)
+  def build_permission_context(conn, permission_module, permission, ctx_fun) do
+    default_context = permission_module.context(conn)
+    permission_context = permission.context(conn, default_context)
 
     ctx_fun.(conn, Map.merge(default_context, permission_context))
   end

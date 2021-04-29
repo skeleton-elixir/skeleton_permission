@@ -1,6 +1,6 @@
-defmodule Skeleton.App.UserView do
-  use Skeleton.Permission.View
-  alias Skeleton.App.UserPermission
+defmodule Skeleton.AppWeb.UserView do
+  use Skeleton.AppWeb, :view
+  alias Skeleton.AppWeb.UserPermission
 
   def with_preload_atom(conn, users) do
     for user <- preload_permissions(conn, users, UserPermission, :can_update) do

@@ -1,6 +1,7 @@
 defmodule Skeleton.PermissionTest do
   use Skeleton.App.TestCase
-  alias Skeleton.App.{User, UserPermission}
+  alias Skeleton.App.User
+  alias Skeleton.AppWeb.UserPermission
 
   describe "check permission" do
     test "when it's permitted" do
