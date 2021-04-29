@@ -17,8 +17,8 @@ parametros permitidos diretamente no `Controller` ou `Resolver(Absinthe)`
 
 def deps do
   [
-    {:skeleton_phoenix, "~> 1.0.0"},
-    {:skeleton_permission, "~> 1.0.0"}
+    {:skeleton_phoenix, "~> 2.0.0"},
+    {:skeleton_permission, "~> 2.0.0"}
   ]
 end
 ```
@@ -39,6 +39,18 @@ defmodule AppWeb.Controller do
   def is_authenticated(conn), do: conn.assigns[:current_user]
 
   def fallback(conn), do: conn
+end
+```
+
+```elixir
+# lib/app_web/view.ex
+
+defmodule AppWeb.View do
+  defmacro __using__(_) do
+    quote do
+      use Skeleton.Permission.View, permission: AppWeb.Permission
+    end
+  end
 end
 ```
 
