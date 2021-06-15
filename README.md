@@ -18,7 +18,7 @@ parametros permitidos diretamente no `Controller` ou `Resolver(Absinthe)`
 def deps do
   [
     {:skeleton_phoenix, "~> 2.0.0"},
-    {:skeleton_permission, "~> 2.0.0"}
+    {:skeleton_permission, "~> 2.1.0"}
   ]
 end
 ```
