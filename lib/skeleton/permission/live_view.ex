@@ -7,18 +7,30 @@ defmodule Skeleton.Permission.LiveView do
     quote do
       @permission_module unquote(opts[:permission]) || raise("Permission required")
 
-      def check_permission(%{halted: true} = socket, _, _, _), do: socket
+      def check_permission({:error, error}, _, _, _), do: {:error, error}
 
       def check_permission(socket, permission, permission_name, ctx_fun) do
-        LiveView.do_check_permission(socket, @permission_module, permission, permission_name, ctx_fun)
+        LiveView.do_check_permission(
+          socket,
+          @permission_module,
+          permission,
+          permission_name,
+          ctx_fun
+        )
       end
 
-      def check_permission(%{halted: true} = socket, _, _), do: socket
+      def check_permission({:error, error}, _, _), do: {:error, error}
 
       def check_permission(socket, permission, permission_name) do
-        LiveView.do_check_permission(socket, @permission_module, permission, permission_name, fn _, ctx ->
-          ctx
-        end)
+        LiveView.do_check_permission(
+          socket,
+          @permission_module,
+          permission,
+          permission_name,
+          fn _, ctx ->
+            ctx
+          end
+        )
       end
     end
   end
