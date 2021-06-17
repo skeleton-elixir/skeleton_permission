@@ -1,3 +1,8 @@
+2.1.1
+------
+#### Changes
+* Live view permission fixed
+
 2.1.0
 ------
 #### Changes
