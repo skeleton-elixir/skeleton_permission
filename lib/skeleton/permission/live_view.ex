@@ -46,7 +46,7 @@ defmodule Skeleton.Permission.LiveView do
     if permission.check(permission_name, context) do
       socket
     else
-      unauthorized(socket)
+      forbidden(socket)
     end
   end
 
@@ -61,9 +61,9 @@ defmodule Skeleton.Permission.LiveView do
 
   # Return unauthorized
 
-  def unauthorized(socket) do
-    {:error, socket, :unauthorized}
-  end
+  # def unauthorized(socket) do
+    # {:error, socket, :unauthorized}
+  # end
 
   def forbidden(socket) do
     {:error, socket, :forbidden}
